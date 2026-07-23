@@ -17,7 +17,7 @@ public class WordFormatUtils {
         word = normalize(word);
 
         for (char c : word.toCharArray()) {
-            if (ALPHABET.indexOf(c) != -1) {
+            if (ALPHABET.indexOf(c) == -1) {
                 return false;
             }
         }
