@@ -1,9 +1,9 @@
 package ru.yandex.practicum.game;
 
-import ru.yandex.practicum.exception.Exception.HintDictionaryIsEmptyException;
+import ru.yandex.practicum.exception.exception.HintDictionaryIsEmptyException;
 import ru.yandex.practicum.util.WordFormatUtils;
-import ru.yandex.practicum.exception.Exception.UserInputException;
-import ru.yandex.practicum.exception.Exception.WordNotFoundInDictionaryException;
+import ru.yandex.practicum.exception.exception.UserInputException;
+import ru.yandex.practicum.exception.exception.WordNotFoundInDictionaryException;
 
 import java.util.*;
 

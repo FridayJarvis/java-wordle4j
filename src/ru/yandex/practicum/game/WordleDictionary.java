@@ -1,6 +1,6 @@
 package ru.yandex.practicum.game;
 
-import ru.yandex.practicum.exception.Runtime.EmptyOrNullDictionaryException;
+import ru.yandex.practicum.exception.runtime.EmptyOrNullDictionaryException;
 
 import java.util.Iterator;
 import java.util.Random;

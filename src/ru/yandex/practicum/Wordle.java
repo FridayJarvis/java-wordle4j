@@ -1,10 +1,12 @@
 package ru.yandex.practicum;
 
-import ru.yandex.practicum.exception.Exception.HintDictionaryIsEmptyException;
-import ru.yandex.practicum.exception.Exception.UserInputException;
-import ru.yandex.practicum.exception.Exception.WordNotFoundInDictionaryException;
+import ru.yandex.practicum.exception.exception.HintDictionaryIsEmptyException;
+import ru.yandex.practicum.exception.exception.UserInputException;
+import ru.yandex.practicum.exception.exception.WordNotFoundInDictionaryException;
+import ru.yandex.practicum.exception.runtime.DictionaryLoadException;
 import ru.yandex.practicum.game.WordleDictionary;
 import ru.yandex.practicum.game.WordleGame;
+import ru.yandex.practicum.io.Logger;
 import ru.yandex.practicum.io.WordleDictionaryLoader;
 import ru.yandex.practicum.util.ExceptionHandlerUtils;
 import ru.yandex.practicum.util.WordFormatUtils;
@@ -19,13 +21,15 @@ public class Wordle {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
+        Logger.log("scanner успешно создался");
         WordleDictionary dictionary;
 
         try {
             dictionary = WordleDictionaryLoader.load("words_ru.txt");
+            Logger.log("dictionary успешно загружен");
         } catch (IOException e) {
             ExceptionHandlerUtils.printExceptionToLog(e);
-            throw new RuntimeException("Ошибка открытия файла word_ru.txt");
+            throw new DictionaryLoadException("Ошибка загрузки словаря из word_ru.txt");
         }
 
         WordleGame game = new WordleGame(STEPS, dictionary);
