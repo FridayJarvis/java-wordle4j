@@ -19,7 +19,12 @@ class WordleGameTest {
     void setUp() {
         testLogger = new PrintWriter(System.out, true);
 
-        testDictionary = new WordleDictionary(Set.of("кошка", "кашак", "шапка"));
+        testDictionary = new WordleDictionary(Set.of("кошка", "кашак", "шапка")) {
+            @Override
+            public String getRandomWord() {
+                return "кошка";
+            }
+        };
         game = new WordleGame(6, testDictionary);
     }
 
@@ -36,6 +41,7 @@ class WordleGameTest {
 
     @Test
     void shouldCalculateMaskCorrectly() throws UserInputException {
+        testLogger.println("Проверка корректности вывода маски\"");
         String mask = game.playerMove("шапка");
 
         assertEquals("^--++", mask);
@@ -44,6 +50,7 @@ class WordleGameTest {
 
     @Test
     void shouldBeGameOverWhenStepsAreZero() throws HintDictionaryIsEmptyException {
+        testLogger.println("Проверка условия поражения при отсутствии шагов");
         WordleGame game = new WordleGame(1, testDictionary);
         assertFalse(game.gameOver());
 
