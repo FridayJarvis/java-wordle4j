@@ -13,7 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class WordleDictionaryLoader {
-    private WordleDictionaryLoader() {}
+    private WordleDictionaryLoader() {
+    }
 
     public static WordleDictionary load(final String path) throws IOException {
         final Set<String> validWords = new HashSet<>();
