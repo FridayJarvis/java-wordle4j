@@ -21,7 +21,7 @@ public class WordleGame {
 
     public WordleGame(int steps, WordleDictionary dictionary) {
         this.steps = steps;
-        this.dictionary = dictionary;
+        this.dictionary = new WordleDictionary(dictionary);
         answer = dictionary.getRandomWord();
         dictionaryForHints = new WordleDictionary(new HashSet<>(dictionary.getWords()));
     }
@@ -115,6 +115,10 @@ public class WordleGame {
 
     public int getSteps() {
         return steps;
+    }
+
+    public String getAnswer() {
+        return answer;
     }
 
     public boolean wasWin(final String wordleMask) {

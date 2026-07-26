@@ -6,13 +6,20 @@ import ru.yandex.practicum.exception.exception.WordNotFoundInDictionaryException
 import ru.yandex.practicum.exception.runtime.DictionaryLoadException;
 import ru.yandex.practicum.game.WordleDictionary;
 import ru.yandex.practicum.game.WordleGame;
-import ru.yandex.practicum.io.Logger;
+
+import static ru.yandex.practicum.io.Logger.log;
+import static ru.yandex.practicum.io.Logger.setWriter;
+
 import ru.yandex.practicum.io.WordleDictionaryLoader;
 import ru.yandex.practicum.util.ExceptionHandlerUtils;
 import ru.yandex.practicum.util.WordFormatUtils;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Scanner;
 
 
@@ -20,47 +27,55 @@ public class Wordle {
     private static final int STEPS = 6;
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
-        Logger.log("scanner успешно создался");
-        WordleDictionary dictionary;
+        initLoggerInFile();
 
-        try {
-            dictionary = WordleDictionaryLoader.load("words_ru.txt");
-            Logger.log("dictionary успешно загружен");
-        } catch (IOException e) {
-            ExceptionHandlerUtils.printExceptionToLog(e);
-            throw new DictionaryLoadException("Ошибка загрузки словаря из word_ru.txt");
-        }
+        final Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
+        log("scanner успешно создался");
+        final WordleDictionary dictionary = initDictionary("word_ru.txt");
+        final WordleGame game = initGame(STEPS, dictionary);
 
-        WordleGame game = new WordleGame(STEPS, dictionary);
-
-        printIntroduction(game);
+        printIntroduction(game.getSteps());
         while (!game.gameOver()) {
             System.out.println("Для выхода из игры введите \"exit\"");
             System.out.println("Попыток: " + game.getSteps());
             System.out.println("Введите ответ (для автоматической подсказки нажмите клавишу Enter):");
             String userInput = scanner.nextLine();
+            log(String.format("Пользователь ввел с клавиатуры \"%s\"", userInput));
 
             if (WordFormatUtils.normalize(userInput).equals("exit")) {
                 System.out.println("Вы вышли из игры");
+                log("Пользователь сам вышел из игры");
                 return;
             }
 
-            String wordleMask;
-
+            final String wordleMask;
             try {
                 if (game.shouldBotMove(userInput)) {
                     final String botGuess = game.getBotGuess();
                     wordleMask = game.botMove(botGuess);
 
+                    log(String.format("Бот дал подсказку: \"%s\"\n" +
+                                    "\t- wordle-маска: %s\n" +
+                                    "\t- количество ходов осталось после хода: %d",
+                            botGuess, wordleMask, game.getSteps()));
+
                     System.out.println(botGuess);
                 } else {
                     wordleMask = game.playerMove(userInput);
+
+                    log(String.format("Игрок ввел ответ: \"%s\"\n" +
+                                    "\t- wordle-маска: %s\n" +
+                                    "\t- количество оставшихся ходов, оставшихся после хода: %d",
+                            userInput, wordleMask, game.getSteps()));
                 }
                 System.out.println(wordleMask + '\n');
 
                 if (game.wasWin(wordleMask)) {
                     System.out.println("\nВы отгадали слово и победили в игре!");
+                    log(String.format("Игрок отгадал слово и победил\n" +
+                                    "\t- wordle-маска: %s\n" +
+                                    "\t- количество ходов: %s",
+                            wordleMask, game.getSteps()));
                     return;
                 } else if (game.gameOver()) {
                     System.out.println("\nВы проиграли!");
@@ -77,7 +92,28 @@ public class Wordle {
         }
     }
 
-    private static void printIntroduction(WordleGame game) {
+    private static WordleGame initGame(final int steps, WordleDictionary dictionary) {
+        final WordleGame game = new WordleGame(steps, dictionary);
+        log(String.format("Игра успешно создана.\n" +
+                        "\t- слово загадано: %s" +
+                        "\t- оставшихся попыток: %s",
+                game.getAnswer(), game.getSteps()));
+
+        return game;
+    }
+
+    private static WordleDictionary initDictionary(final String path) {
+        try {
+            WordleDictionary dictionary = WordleDictionaryLoader.load(path);
+            log("dictionary успешно загружен");
+            return dictionary;
+        } catch (IOException e) {
+            ExceptionHandlerUtils.printExceptionToLog(e);
+            throw new DictionaryLoadException("Ошибка загрузки словаря из word_ru.txt");
+        }
+    }
+
+    private static void printIntroduction(final int gameSteps) {
         System.out.printf("""
                                     Добро пожаловать в игру!
                 Было загадано 5-ти буквенное слово на русском языке, нужно его отгадать.
@@ -85,6 +121,17 @@ public class Wordle {
                 \t+ значит, что буква есть в слове и она на своем месте
                 \t^ значит, что буква есть, но не на своем месте
                 \t- значит, что такой буквы в слове нет
-                У вас %d попыток\n\n""", game.getSteps());
+                У вас %d попыток\n\n""", gameSteps);
+    }
+
+    private static void initLoggerInFile() {
+        try (PrintWriter fileWriter = new PrintWriter(Files.newBufferedWriter(
+                Path.of("words_ru.txt"),
+                StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND))) {
+            setWriter(fileWriter);
+        } catch (IOException e) {
+            System.err.println("Невозможно создать файл лога. Логи будут выводиться в консоль");
+        }
     }
 }

@@ -2,6 +2,7 @@ package ru.yandex.practicum.game;
 
 import ru.yandex.practicum.exception.runtime.EmptyOrNullDictionaryException;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
@@ -12,7 +13,11 @@ public class WordleDictionary {
     private final Random random = new Random();
 
     public WordleDictionary(final Set<String> words) {
-        this.words = words;
+        this.words = new HashSet<>(words);
+    }
+
+    public WordleDictionary(WordleDictionary dictionary) {
+        words = new HashSet<>(dictionary.getWords());
     }
 
     public boolean contains(final String word) {
