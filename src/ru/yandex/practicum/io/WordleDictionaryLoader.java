@@ -14,7 +14,6 @@ import java.util.Set;
 
 public class WordleDictionaryLoader {
     private WordleDictionaryLoader() {
-        
     }
 
     public static WordleDictionary load(final String path) throws IOException {
