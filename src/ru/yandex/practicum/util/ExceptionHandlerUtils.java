@@ -3,7 +3,8 @@ package ru.yandex.practicum.util;
 import ru.yandex.practicum.io.Logger;
 
 public class ExceptionHandlerUtils {
-    private ExceptionHandlerUtils() {}
+    private ExceptionHandlerUtils() {
+    }
 
     public static void printExceptionToLog(final Throwable e) {
         final StringBuilder logMessage = new StringBuilder();

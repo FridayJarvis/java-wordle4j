@@ -1,8 +1,8 @@
 package ru.yandex.practicum.io;
 
 import ru.yandex.practicum.exception.runtime.EmptyOrNullDictionaryException;
-import ru.yandex.practicum.util.WordFormatUtils;
 import ru.yandex.practicum.game.WordleDictionary;
+import ru.yandex.practicum.util.WordFormatUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class WordleDictionaryLoader {
-    private WordleDictionaryLoader() {}
+    private WordleDictionaryLoader() {
+    }
 
     public static WordleDictionary load(final String path) throws IOException {
         final Set<String> validWords = new HashSet<>();
