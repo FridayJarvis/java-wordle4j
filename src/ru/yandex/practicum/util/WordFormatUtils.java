@@ -3,7 +3,8 @@ package ru.yandex.practicum.util;
 public class WordFormatUtils {
     private static final String ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
-    private WordFormatUtils() {}
+    private WordFormatUtils() {
+    }
 
     public static String normalize(String word) {
         return word.trim().toLowerCase().replace('ё', 'е');

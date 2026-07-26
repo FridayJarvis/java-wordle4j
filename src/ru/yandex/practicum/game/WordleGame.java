@@ -1,11 +1,12 @@
 package ru.yandex.practicum.game;
 
 import ru.yandex.practicum.exception.exception.HintDictionaryIsEmptyException;
-import ru.yandex.practicum.util.WordFormatUtils;
 import ru.yandex.practicum.exception.exception.UserInputException;
 import ru.yandex.practicum.exception.exception.WordNotFoundInDictionaryException;
+import ru.yandex.practicum.util.WordFormatUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
 
 public class WordleGame {
     private static final String RIGHT_WORDLE_MASK = "+++++";

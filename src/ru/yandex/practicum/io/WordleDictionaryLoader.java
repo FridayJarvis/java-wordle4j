@@ -1,8 +1,8 @@
 package ru.yandex.practicum.io;
 
 import ru.yandex.practicum.exception.runtime.EmptyOrNullDictionaryException;
-import ru.yandex.practicum.util.WordFormatUtils;
 import ru.yandex.practicum.game.WordleDictionary;
+import ru.yandex.practicum.util.WordFormatUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

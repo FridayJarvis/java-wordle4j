@@ -6,10 +6,6 @@ import ru.yandex.practicum.exception.exception.WordNotFoundInDictionaryException
 import ru.yandex.practicum.exception.runtime.DictionaryLoadException;
 import ru.yandex.practicum.game.WordleDictionary;
 import ru.yandex.practicum.game.WordleGame;
-
-import static ru.yandex.practicum.io.Logger.log;
-import static ru.yandex.practicum.io.Logger.setWriter;
-
 import ru.yandex.practicum.io.WordleDictionaryLoader;
 import ru.yandex.practicum.util.ExceptionHandlerUtils;
 import ru.yandex.practicum.util.WordFormatUtils;
@@ -21,6 +17,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Scanner;
+
+import static ru.yandex.practicum.io.Logger.log;
+import static ru.yandex.practicum.io.Logger.setWriter;
 
 
 public class Wordle {
