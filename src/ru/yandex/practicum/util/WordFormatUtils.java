@@ -2,6 +2,7 @@ package ru.yandex.practicum.util;
 
 public class WordFormatUtils {
     private static final String ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+    private static final int VALID_WORD_LENGTH = 5;
 
     private WordFormatUtils() {
     }
@@ -27,6 +28,6 @@ public class WordFormatUtils {
     }
 
     private static boolean hasValidLength(final String word) {
-        return word.trim().length() == 5;
+        return word.trim().length() == VALID_WORD_LENGTH;
     }
 }

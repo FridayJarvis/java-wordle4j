@@ -6,7 +6,7 @@ import ru.yandex.practicum.exception.exception.WordNotFoundInDictionaryException
 import ru.yandex.practicum.util.WordFormatUtils;
 
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.Set;
 
 public class WordleGame {
     private static final String RIGHT_WORDLE_MASK = "+++++";
@@ -24,7 +24,7 @@ public class WordleGame {
         this.steps = steps;
         this.dictionary = new WordleDictionary(dictionary);
         answer = dictionary.getRandomWord();
-        dictionaryForHints = new WordleDictionary(new HashSet<>(dictionary.getWords()));
+        dictionaryForHints = new WordleDictionary(dictionary.getWords());
     }
 
     public boolean gameOver() {
@@ -39,7 +39,6 @@ public class WordleGame {
         if (!dictionary.contains(guess))
             throw new WordNotFoundInDictionaryException();
 
-
         String wordleMask = calculateWordleMask(guess);
         updateHints(guess, wordleMask);
 
@@ -47,43 +46,44 @@ public class WordleGame {
         return wordleMask;
     }
 
-    public String botMove(final String botGuess) throws HintDictionaryIsEmptyException {
+    public String botMove(final String botGuess) {
         String wordleMask = calculateWordleMask(botGuess);
-
-        if (dictionaryForHints.isEmpty()) {
-            throw new HintDictionaryIsEmptyException();
-        }
-
         updateHints(botGuess, wordleMask);
         --steps;
         return wordleMask;
     }
 
     private void updateHints(final String guess, final String wordleMask) {
-        Iterator<String> iterator = dictionaryForHints.getWords().iterator();
+        Set<String> wordsToRemove = new HashSet<>();
 
-        while (iterator.hasNext()) {
-            final String word = iterator.next();
+        for (String word : dictionaryForHints.getWords()) {
             for (int i = 0; i < guess.length(); i++) {
                 char guessChar = guess.charAt(i);
                 char maskChar = wordleMask.charAt(i);
 
                 if (maskChar == '+' && word.charAt(i) != guessChar) {
-                    iterator.remove();
+                    wordsToRemove.add(word);
                     break;
                 } else if (maskChar == '^' && (word.indexOf(guessChar) == -1 || word.charAt(i) == guessChar)) {
-                    iterator.remove();
+                    wordsToRemove.add(word);
                     break;
                 } else if (maskChar == '-' && !answer.contains(String.valueOf(guessChar))
                         && word.contains(String.valueOf(guessChar))) {
-                    iterator.remove();
+                    wordsToRemove.add(word);
                     break;
                 }
             }
         }
+
+        for (String word : wordsToRemove) {
+            dictionaryForHints.removeWord(word);
+        }
     }
 
-    public String getBotGuess() {
+    public String getBotGuess() throws HintDictionaryIsEmptyException {
+        if (dictionaryForHints.isEmpty()) {
+            throw new HintDictionaryIsEmptyException();
+        }
         return dictionaryForHints.getRandomWord();
     }
 

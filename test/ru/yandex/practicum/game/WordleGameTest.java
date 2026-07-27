@@ -2,9 +2,7 @@ package ru.yandex.practicum.game;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.exception.exception.HintDictionaryIsEmptyException;
 import ru.yandex.practicum.exception.exception.UserInputException;
-import ru.yandex.practicum.exception.exception.WordNotFoundInDictionaryException;
 import java.io.PrintWriter;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,7 +47,7 @@ class WordleGameTest {
     }
 
     @Test
-    void shouldBeGameOverWhenStepsAreZero() throws HintDictionaryIsEmptyException {
+    void shouldBeGameOverWhenStepsAreZero() {
         testLogger.println("Проверка условия поражения при отсутствии шагов");
         WordleGame game = new WordleGame(1, testDictionary);
         assertFalse(game.gameOver());

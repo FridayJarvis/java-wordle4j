@@ -43,6 +43,10 @@ public class WordleDictionary {
     }
 
     public Set<String> getWords() {
-        return words;
+        return new HashSet<>(words);
+    }
+
+    public void removeWord(String word) {
+        words.remove(word);
     }
 }
