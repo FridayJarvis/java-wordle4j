@@ -26,9 +26,13 @@ public class Wordle {
     private static final int STEPS = 6;
 
     public static void main(String[] args) {
-        initLoggerInFile();
+        try (PrintWriter fileWriter = new PrintWriter(Files.newBufferedWriter(
+                Path.of("log.txt"),
+                StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND), true)) {
+            setWriter(fileWriter);
 
-        try {
             final Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
             log("scanner успешно создался");
             final WordleDictionary dictionary = initDictionary("word_ru.txt");
@@ -49,7 +53,6 @@ public class Wordle {
                 }
 
                 final String wordleMask;
-
                 try {
                     if (game.shouldBotMove(userInput)) {
                         final String botGuess = game.getBotGuess();
@@ -91,6 +94,8 @@ public class Wordle {
                     System.err.println("\nСловарь подсказок пуст. Введите ответ сами. Попыток осталось: " + game.getSteps());
                 }
             }
+        } catch (IOException e) {
+            System.err.println("Невозможно создать файл лога. Логи будут выводиться в консоль");
         } catch (DictionaryLoadException e) {
             ExceptionHandlerUtils.printExceptionToLog(e);
             System.err.println("Критическая ошибка: Не удалось загрузить файл словаря. Игра прервана.");
@@ -132,17 +137,5 @@ public class Wordle {
                 \t^ значит, что буква есть, но не на своем месте
                 \t- значит, что такой буквы в слове нет
                 У вас %d попыток\n\n""", gameSteps);
-    }
-
-    private static void initLoggerInFile() {
-        try (PrintWriter fileWriter = new PrintWriter(Files.newBufferedWriter(
-                Path.of("log.txt"),
-                StandardCharsets.UTF_8,
-                StandardOpenOption.CREATE,
-                StandardOpenOption.APPEND), true)) {
-            setWriter(fileWriter);
-        } catch (IOException e) {
-            System.err.println("Невозможно создать файл лога. Логи будут выводиться в консоль");
-        }
     }
 }
